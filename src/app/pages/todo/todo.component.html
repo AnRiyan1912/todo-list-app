@@ -1,9 +1,14 @@
 <div class="flex justify-center">
   <div class="container flex justify-between">
-    <h1 class="text-xl font-bold flex items-center">
+    <h1 class="text-xl font-bold flex items-center px-6">
       <span>Manage Todo</span>
     </h1>
-    <button class="bg-blue-500 px-5 py-3 text-white" (click)="openSlidePanel()">Add Todo</button>
+    <button
+      class="bg-blue-500 px-5 py-3 text-white text-center"
+      (click)="openSlidePanel()"
+    >
+      + Add Todo
+    </button>
   </div>
 </div>
 <div class="mt-6">
@@ -11,6 +16,61 @@
   <app-todo-card [type]="item.status" [todo]="item"></app-todo-card>
   }
 </div>
-<app-slied-panel [headerText]="'Todo Details'" [isOpen]="isSlidePanelOpen" (onClose)="onCloseSlidePanel()">
-  <form action=""></form>
+<app-slied-panel
+  [headerText]="'Todo Details'"
+  [isOpen]="isSlidePanelOpen"
+  (onClose)="onCloseSlidePanel()"
+>
+  <form (ngSubmit)="onSubmit" [formGroup]="todoForm" autocomplete="off" novalidate>
+    <div class="mb-3 form-group">
+      <label for="title" class="block text-sm font-medium text-gray-700"
+        >Title</label
+      >
+      <input
+        type="text"
+        id="text"
+        name="text"
+        class="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+        formControlName="title"
+      />
+      @if (todoForm.get('title')?.hasError('required') &&
+      todoForm.get('title')?.touched) {
+      <span class="form-error text-red-600 text-sm">Title is required</span>
+      }
+    </div>
+     <div class="form-group mb-3">
+      <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+
+      <textarea name="" rows="10" class="form-control w-full p-2 border-2 border-gray-200 rounded-md  "
+        [class]="{'invalid': todoForm.get('description')?.hasError('required') && todoForm.get('description')?.touched, 'valid':todoForm.get('description')?.valid}"
+        placeholder="Description" formControlName="description"></textarea>
+      @if (todoForm.get('description')?.hasError('required') && todoForm.get('description')?.touched) {
+       <span class="form-error text-red-600 text-sm">Description is required</span>
+      }
+    </div>
+    <div class="form-group mb-3">
+      <label for="status" class="block text-sm font-medium text-gray-700"
+        >Status</label
+      >
+      <select
+        class="form-select w-full h-10 rounded-md"
+        [class]="{
+          invalid:
+            todoForm.get('status')?.hasError('required') &&
+            todoForm.get('status')?.touched,
+          valid: todoForm.get('status')?.valid
+        }" 
+        formControlName="status"
+      >@for (item of todoStatus; track $index) {
+        <option [value]="item">{{item}}</option>
+      }</select>
+      @if (todoForm.get('status')?.hasError('required') && todoForm.get('status')?.touched) {
+             <span class="form-error text-red-600 text-sm">Status is required</span>
+      }
+    </div>
+    <div class="flex gap-2">
+      <button type="submit" class="px-4 py-2 bg-blue-600 text-white hover:bg-blue-400 rounded-md" (click)="onSubmit()">Submit</button>
+      <button type="button" class="px-4 py-2 bg-red-600  text-white hover:bg-red-400 rounded-md" (click)="onCloseSlidePanel()">Cancel</button>
+    </div>
+  </form>
 </app-slied-panel>
