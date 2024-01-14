@@ -1,0 +1,16 @@
+<div class="flex justify-center">
+  <div class="container flex justify-between">
+    <h1 class="text-xl font-bold flex items-center">
+      <span>Manage Todo</span>
+    </h1>
+    <button class="bg-blue-500 px-5 py-3 text-white" (click)="openSlidePanel()">Add Todo</button>
+  </div>
+</div>
+<div class="mt-6">
+  @for (item of todos; track $index) {
+  <app-todo-card [type]="item.status" [todo]="item"></app-todo-card>
+  }
+</div>
+<app-slied-panel [headerText]="'Todo Details'" [isOpen]="isSlidePanelOpen" (onClose)="onCloseSlidePanel()">
+  <form action=""></form>
+</app-slied-panel>
